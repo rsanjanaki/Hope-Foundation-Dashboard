@@ -2,12 +2,20 @@ import os
 import pandas as pd
 
 def load_raw(path="data/raw/Cancer.xlsx", sheet_name=0):
+    """Load the raw spreadsheet (Excel or CSV)."""
     ext = os.path.splitext(path)[1].lower()
     if ext in (".xls", ".xlsx"):
         return pd.read_excel(path, sheet_name=sheet_name, engine="openpyxl")
     return pd.read_csv(path)
 
 def clean_raw(df):
+    """
+    Perform row- and column-level cleaning:
+      - parse Grant Req Date
+      - standardize categorical values
+      - handle numeric conversions
+      - rename columns for consistency
+    """
     df["request_date"] = pd.to_datetime(df["Grant Req Date"])
     df = df.rename(columns={
         "Request Status": "status",
@@ -23,9 +31,9 @@ def clean_raw(df):
         "Remaining Balance": "remaining_balance"
     })
     df["location"] = df["city"].str.strip() + ", " + df["state"].str.strip()
-    df["award_amount"]       = pd.to_numeric(df["award_amount"], errors="coerce").fillna(0)
-    df["income"]             = pd.to_numeric(df["income"], errors="coerce").fillna(0)
-    df["remaining_balance"]  = pd.to_numeric(df["remaining_balance"], errors="coerce").fillna(0)
+    df["award_amount"]      = pd.to_numeric(df["award_amount"], errors="coerce").fillna(0)
+    df["income"]            = pd.to_numeric(df["income"], errors="coerce").fillna(0)
+    df["remaining_balance"] = pd.to_numeric(df["remaining_balance"], errors="coerce").fillna(0)
     return df
 
 def get_ready_for_review(df):
