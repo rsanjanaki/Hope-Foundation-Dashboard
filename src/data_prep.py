@@ -23,9 +23,9 @@ def clean_raw(df):
         "Remaining Balance": "remaining_balance"
     })
     df["location"] = df["city"].str.strip() + ", " + df["state"].str.strip()
-    df["award_amount"] = pd.to_numeric(df["award_amount"], errors="coerce").fillna(0)
-    df["income"]       = pd.to_numeric(df["income"], errors="coerce").fillna(0)
-    df["remaining_balance"] = pd.to_numeric(df["remaining_balance"], errors="coerce").fillna(0)
+    df["award_amount"]       = pd.to_numeric(df["award_amount"], errors="coerce").fillna(0)
+    df["income"]             = pd.to_numeric(df["income"], errors="coerce").fillna(0)
+    df["remaining_balance"]  = pd.to_numeric(df["remaining_balance"], errors="coerce").fillna(0)
     return df
 
 def get_ready_for_review(df):
