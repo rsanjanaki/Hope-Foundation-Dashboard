@@ -1,3 +1,4 @@
+!data/processed/.gitkeep
 __pycache__/
 *.py[cod]
 *.egg-info/
