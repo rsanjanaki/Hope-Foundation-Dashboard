@@ -1,12 +1,19 @@
 import streamlit as st
 import pandas as pd
 import os
+# Compute the repository root directory
+BASE_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), os.pardir)
+)
+
 
 # --- Helper to load CSVs
 @st.cache_data
 def load_csv(name, **kwargs):
-    path = os.path.join("data", "processed", name)
+    # Build the full path from the repo root into data/processed
+    path = os.path.join(BASE_DIR, "data", "processed", name)
     return pd.read_csv(path, **kwargs)
+
 
 # --- Sidebar navigation
 st.sidebar.title("Navigation")
