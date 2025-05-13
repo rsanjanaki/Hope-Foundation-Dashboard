@@ -76,7 +76,7 @@ elif page == "Under-utilization":
 
 elif page == "High-Level Summary":
     st.markdown("## 📈 High-Level Impact & Progress")
-    hl = load_csv("high_level_summary.csv").iloc[0]n
+    hl = load_csv("high_level_summary.csv").iloc[0]
     # Display key metricsn
     c1, c2, c3 = st.columns(3)n
     c1.metric("Total Applications", int(hl["total_applications"]))n
