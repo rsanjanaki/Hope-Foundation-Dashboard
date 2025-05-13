@@ -1,0 +1,2 @@
+total_applications,total_dollars,avg_turnaround_days,yearly_pct_change
+2292,968537.13,7.0228187919463085,"[{'request_date': 2018, 'yoy_pct_change': nan}, {'request_date': 2019, 'yoy_pct_change': 6.141125}, {'request_date': 2020, 'yoy_pct_change': 5.029980395245847}, {'request_date': 2021, 'yoy_pct_change': 2.286879684051709}, {'request_date': 2022, 'yoy_pct_change': 0.5342095397233826}, {'request_date': 2023, 'yoy_pct_change': 2.6394964841417607}, {'request_date': 2024, 'yoy_pct_change': 1.077279413451052}, {'request_date': 2025, 'yoy_pct_change': -0.8874202945935161}]"
