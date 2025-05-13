@@ -78,7 +78,7 @@ elif page == "High-Level Summary":
     st.markdown("## 📈 High-Level Impact & Progress")
     hl = load_csv("high_level_summary.csv").iloc[0]
     # Display key metricsn
-    c1, c2, c3 = st.columns(3)n
+    c1, c2, c3 = st.columns(3)
     c1.metric("Total Applications", int(hl["total_applications"]))n
     c2.metric("Total Dollars Awarded", f"${hl[total_dollars]:,.0f}")n
     c3.metric("Avg Turnaround (days)", f"{hl[avg_turnaround_days]:.1f}")n
