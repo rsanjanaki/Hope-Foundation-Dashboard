@@ -76,14 +76,22 @@ elif page == "Under-utilization":
 
 elif page == "High-Level Summary":
     st.markdown("## 📈 High-Level Impact & Progress")
-    hl = load_csv("high_level_summary.csv").iloc[0]
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Total Applications", int(hl["total_applications"]))
-    c2.metric("Total Dollars Awarded", f"${hl['total_dollars']:,.0f}")
-    c3.metric("Avg Turnaround (days)", f"{hl['avg_turnaround_days']:.1f}")
-    yoy = hl["yearly_pct_change"]
-    if isinstance(yoy, str):
-        yoy = pd.read_json(yoy)
-    yoy = pd.DataFrame(yoy).set_index(yoy.columns[0])
-    st.subheader("Year-over-Year % Change")
-    st.line_chart(yoy["yoy_pct_change"], use_container_width=True)
+    hl = load_csv("high_level_summary.csv").iloc[0]n
+    # Display key metricsn
+    c1, c2, c3 = st.columns(3)n
+    c1.metric("Total Applications", int(hl["total_applications"]))n
+    c2.metric("Total Dollars Awarded", f"${hl[total_dollars]:,.0f}")n
+    c3.metric("Avg Turnaround (days)", f"{hl[avg_turnaround_days]:.1f}")n
+    # Parse and plot year-over-year change safelyn
+    import astn
+    raw = hl["yearly_pct_change"]n
+    if isinstance(raw, str):n
+        yoy_list = ast.literal_eval(raw)n
+    else:n
+        yoy_list = rawn
+    yoy_df = pd.DataFrame(yoy_list)n
+    # Assume first column is yearn
+    year_col = yoy_df.columns[0]n
+    yoy_df = yoy_df.set_index(year_col)n
+    st.subheader("Year-over-Year % Change in Awarded Amounts")n
+    st.line_chart(yoy_df["yoy_pct_change"], use_container_width=True)
