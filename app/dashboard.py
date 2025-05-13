@@ -4,7 +4,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-# —————————————————————————————————————————————————————————————
 # Page config
 st.set_page_config(
     page_title="Hope Foundation Dashboard",
@@ -12,16 +11,15 @@ st.set_page_config(
     layout="wide"
 )
 
-# Compute paths
+# Paths
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
-PROC     = os.path.join(BASE_DIR, "data", "processed")
+PROC = os.path.join(BASE_DIR, "data", "processed")
 
 @st.cache_data
 def load_csv(name, **kwargs):
     return pd.read_csv(os.path.join(PROC, name), **kwargs)
 
-# —————————————————————————————————————————————————————————————
-# Sidebar filters
+# Sidebar
 st.sidebar.header("Navigation")
 page = st.sidebar.radio("Go to", [
     "Ready for Review",
@@ -31,15 +29,15 @@ page = st.sidebar.radio("Go to", [
     "High-Level Summary"
 ])
 
-# —————————————————————————————————————————————————————————————
 if page == "Ready for Review":
     st.markdown("## 📋 Ready for Review")
     df = load_csv("ready_for_review.csv", parse_dates=["request_date"])
-    signed_choice = st.sidebar.selectbox("Signed by Committee?", ["All", "Signed", "Unsigned"])
-    if signed_choice == "Signed":
-        df = df[df["signed_committee"].str.lower() == "yes"]
-    elif signed_choice == "Unsigned":
-        df = df[df["signed_committee"].str.lower() != "yes"]
+    df["signed_committee"] = df["signed_committee"].astype(str).str.lower()
+    choice = st.sidebar.selectbox("Signed by Committee?", ["All", "Signed", "Unsigned"])
+    if choice == "Signed":
+        df = df[df["signed_committee"] == "yes"]
+    elif choice == "Unsigned":
+        df = df[df["signed_committee"] != "yes"]
     st.write(f"Showing **{len(df)}** applications")
     st.dataframe(df, use_container_width=True)
 
@@ -77,21 +75,16 @@ elif page == "Under-utilization":
 elif page == "High-Level Summary":
     st.markdown("## 📈 High-Level Impact & Progress")
     hl = load_csv("high_level_summary.csv").iloc[0]
-    # Display key metricsn
     c1, c2, c3 = st.columns(3)
     c1.metric("Total Applications", int(hl["total_applications"]))
-    c2.metric("Total Dollars Awarded", f"${hl[total_dollars]:,.0f}")
-    c3.metric("Avg Turnaround (days)", f"{hl[avg_turnaround_days]:.1f}")
-    # Parse and plot year-over-year change safelyn
-    import astn
-    raw = hl["yearly_pct_change"]n
-    if isinstance(raw, str):n
+    c2.metric("Total Dollars Awarded", f"${hl['total_dollars']:,.0f}")
+    c3.metric("Avg Turnaround (days)", f"{hl['avg_turnaround_days']:.1f}")
+    import ast
+    raw = hl["yearly_pct_change"]
+    if isinstance(raw, str):
         yoy_list = ast.literal_eval(raw)
-    else:n
-        yoy_list = rawn
-    yoy_df = pd.DataFrame(yoy_list)
-    # Assume first column is yearn
-    year_col = yoy_df.columns[0]n
-    yoy_df = yoy_df.set_index(year_col)
+    else:
+        yoy_list = raw
+    yoy = pd.DataFrame(yoy_list).set_index(pd.DataFrame(yoy_list).columns[0])
     st.subheader("Year-over-Year % Change in Awarded Amounts")
-    st.line_chart(yoy_df["yoy_pct_change"], use_container_width=True)
+    st.line_chart(yoy["yoy_pct_change"], use_container_width=True)
