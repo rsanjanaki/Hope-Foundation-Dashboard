@@ -1,0 +1,31 @@
+name: Auto-Update Processed Data
+
+on:
+  push:
+    paths:
+      - 'data/raw/**'
+  schedule:
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Run data prep
+        run: python src/data_prep.py
+      - name: Commit processed CSVs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/processed/*.csv
+          git diff --cached --quiet || git commit -m "Auto-update data [skip ci]"
+          git push origin main
